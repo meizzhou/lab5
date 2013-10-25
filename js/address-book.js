@@ -33,4 +33,35 @@ function sortObjArray(objArray, propName) {
             return 1;
     });
 } //sortObjArray()
+$(function() {
+    sortObjArray(Employees.entries, 'last');
+    var sortBtn = $(this);
+    sortBtn.attr('data-sortby');
+    render(Employees.entries);
+});
 
+function render(entries) {
+    var instance;
+    var template = $('.template');
+    var addr = $('.address-book');
+    addr.empty();
+    $.each(Employees.entries, function(){
+        instance = template.clone();
+        for(prop in this) {
+            if(prop === 'pic') {
+                instance.find('.pic').attr({
+                    src: this [prop],
+                    alt: 'Picture of' + this.first + ' ' + this.last
+                });
+            } else {
+                instance.find('.' + prop).html(this [prop]);
+            }
+            instance.removeClass('template');
+            addr.append(instance);
+        }
+    });
+}
+
+
+
+    
