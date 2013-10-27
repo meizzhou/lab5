@@ -33,18 +33,35 @@ function sortObjArray(objArray, propName) {
             return 1;
     });
 } //sortObjArray()
+
 $(function() {
     sortObjArray(Employees.entries, 'last');
-    var sortBtn = $(this);
-    sortBtn.attr('data-sortby');
     render(Employees.entries);
-});
+    $('.btn').click(function(){
+        $('.btn').siblings('.active').removeClass('active');
+        var sortBtn = $(this);
+        var sortAttr = sortBtn.attr('data-sortby');
+        sortObjArray(Employees.entries, sortAttr);
+        render(Employees.entries);
+
+        sortBtn.addClass('active');
+    });  
+
+    $('.sort-ui .btn').popover({
+        content: 'Click to Resort',
+        container: 'body',
+        trigger: 'hover',
+        placement: 'bottom'
+    });
+})
+
 
 function render(entries) {
     var instance;
     var template = $('.template');
-    var addr = $('.address-book');
-    addr.empty();
+    var addressbook = $('.address-book');
+    addressbook.hide();
+    addressbook.empty();
     $.each(Employees.entries, function(){
         instance = template.clone();
         for(prop in this) {
@@ -57,10 +74,12 @@ function render(entries) {
                 instance.find('.' + prop).html(this [prop]);
             }
             instance.removeClass('template');
-            addr.append(instance);
+            addressbook.append(instance);
         }
     });
+    addressbook.fadeIn();
 }
+
 
 
 
